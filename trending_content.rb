@@ -14,7 +14,7 @@ class TrendingContent
     subdirs         = lambda { |str| Dir[@namedir + str + '/*'].select{ |node| Dir.exist? node }}
     comparable_item = lambda { |num| subdirs.call(pre_suffix(num)).size }
     curr_subdir_count = nil
-    loop do 
+    loop do
       prev_subdir_count = (curr_subdir_count.nil? == true) ? comparable_item.call(@level_subdir) : curr_subdir_count
       @level_subdir       += 1
       curr_subdir_count = comparable_item.call(@level_subdir)
@@ -27,7 +27,7 @@ class TrendingContent
     arr.inject(Hash.new(0)) { |h,v| h[v] += 1; h}
   end
 
-  def show_files 
+  def show_files
     path = @namedir + pre_suffix(@level_subdir) + '/*'
     Dir[path].select { |node| File.file? node }
   end
