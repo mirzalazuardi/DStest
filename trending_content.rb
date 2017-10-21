@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'digest'
 class TrendingContent
   def initialize(path = '.')
