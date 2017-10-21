@@ -63,12 +63,12 @@ class TrendingContent
     content_of_toptrend = File.read(files[digst_n_cont_idx[:content_idx]])
     "#{content_of_toptrend} #{freq_of_toptrend}"
   rescue TypeError
-    puts 'Please enter valid path'
+    'Please enter valid path'
   end
 end
 
 # USAGE
-test = TrendingContent.new
+test = TrendingContent.new(4444)
 # OR
 # test = TrendingContent.new('./DropsuiteTest')
-test.exec
+p test.exec
