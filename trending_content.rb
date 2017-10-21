@@ -2,10 +2,10 @@
 
 require 'digest'
 # This class created by Mirzalazuardi Hermawan in term of fulfill the job offer
-# for Dropsuite Bandung
+# for Dropsuite Bandung, Indonesia
 class TrendingContent
   def initialize(path = '.')
-    namedir  = path
+    namedir  = path.to_s
     @namedir = namedir
     @lvl_subd = 0
   end
@@ -57,6 +57,8 @@ class TrendingContent
     freq_of_toptrend    = freqs[digest_trend]
     content_of_toptrend = File.read(files[content_idx])
     "#{content_of_toptrend} #{freq_of_toptrend}"
+  rescue TypeError
+    puts 'Please enter valid path'
   end
 end
 
