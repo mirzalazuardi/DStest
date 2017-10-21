@@ -23,11 +23,27 @@ class TrendingContent
     p @level_subdir
   end
 
+  def frequency arr
+    arr.inject(Hash.new(0)) { |h,v| h[v] += 1; h}
+  end
+
+  def show_files 
+    path = @namedir + pre_suffix(@level_subdir) + '/*'
+    Dir[path].select { |node| File.file? node }
+  end
+
   def exec
-    p @namedir
+    count_level_subdir
+    files               = show_files
+    digests             = files.map { |node| Digest::SHA256.file(node).hexdigest }
+    freqs               = frequency(digests)
+    digest_trend        = digests.max_by { |v| freqs[v] }
+    content_idx         = digests.index(digest_trend)
+    freq_of_toptrend    = freqs[digest_trend]
+    content_of_toptrend = File.read(files[content_idx])
+    "#{content_of_toptrend} #{freq_of_toptrend}"
   end
 end
 
 test = TrendingContent.new
-test.count_level_subdir
-#test.exec
+test.exec
