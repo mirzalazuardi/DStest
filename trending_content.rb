@@ -47,15 +47,20 @@ class TrendingContent
     end
   end
 
+  def digest_tr_n_cont_idx(digests, freqs)
+    digest_trend        = digests.max_by { |v| freqs[v] }
+    content_idx         = digests.index(digest_trend)
+    { digest_trend: digest_trend, content_idx: content_idx }
+  end
+
   def exec
     count_lvl
     files               = show_files
     digests             = show_digest files
     freqs               = frequency(digests)
-    digest_trend        = digests.max_by { |v| freqs[v] }
-    content_idx         = digests.index(digest_trend)
-    freq_of_toptrend    = freqs[digest_trend]
-    content_of_toptrend = File.read(files[content_idx])
+    digst_n_cont_idx    = digest_tr_n_cont_idx(digests, freqs)
+    freq_of_toptrend    = freqs[digst_n_cont_idx[:digest_trend]]
+    content_of_toptrend = File.read(files[digst_n_cont_idx[:content_idx]])
     "#{content_of_toptrend} #{freq_of_toptrend}"
   rescue TypeError
     puts 'Please enter valid path'
