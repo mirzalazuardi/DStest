@@ -20,7 +20,7 @@ class TrendingContent
       curr_subdir_count = comparable_item.call(@level_subdir)
       break if curr_subdir_count == prev_subdir_count
     end
-    p @level_subdir
+    @level_subdir
   end
 
   def frequency arr
