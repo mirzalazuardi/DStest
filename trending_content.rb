@@ -24,7 +24,7 @@ class TrendingContent
   end
 
   def frequency arr
-    arr.inject(Hash.new(0)) { |h,v| h[v] += 1; h}
+    arr.inject(Hash.new(0)) { |h,v| h[v] += 1; h }
   end
 
   def show_files
