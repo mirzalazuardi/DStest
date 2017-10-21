@@ -5,7 +5,7 @@ class TrendingContent
   def initialize(path = '.')
     namedir  = path
     @namedir = namedir
-    @level_subdir = 0
+    @lvl_subd = 0
   end
 
   def pre_suffix(num)
@@ -14,30 +14,25 @@ class TrendingContent
 
   def count_lvl
     subdirs = ->(str) { Dir[@namedir + str + '/*'].select { |n| Dir.exist? n } }
-    comparable_item = ->(num) { subdirs.call(pre_suffix(num)).size }
-    curr_subdir_count = nil
+    comp_itm = ->(num) { subdirs.call(pre_suffix(num)).size }
+    cur_subd_cnt = nil
     loop do
-      if curr_subdir_count.nil? == true
-        prev_subdir_count = comparable_item.call(@level_subdir)
-      else
-        prev_subdir_count = curr_subdir_count
-      end
-      @level_subdir += 1
-      curr_subdir_count = comparable_item.call(@level_subdir)
-      break if curr_subdir_count == prev_subdir_count
+      prv_subd_cnt = cur_subd_cnt.nil? ? comp_itm.call(@lvl_subd) : cur_subd_cnt
+      @lvl_subd += 1
+      cur_subd_cnt = comp_itm.call(@lvl_subd)
+      break if cur_subd_cnt == prv_subd_cnt
     end
-    @level_subdir
+    @lvl_subd
   end
 
   def frequency(arr)
-    arr.inject(Hash.new(0)) do |h, v|
+    arr.each_with_object(Hash.new(0)) do |v, h|
       h[v] += 1
-      h
     end
   end
 
   def show_files
-    path = @namedir + pre_suffix(@level_subdir) + '/*'
+    path = @namedir + pre_suffix(@lvl_subd) + '/*'
     Dir[path].select { |node| File.file? node }
   end
 
