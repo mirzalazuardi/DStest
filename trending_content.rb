@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require 'digest'
+# This class created by Mirzalazuardi Hermawan in term of fulfill the job offer
+# for Dropsuite Bandung
 class TrendingContent
   def initialize(path = '.')
     namedir  = path
@@ -12,9 +14,12 @@ class TrendingContent
     '/**' * num
   end
 
+  def subdirs(pre_suffix)
+    Dir[@namedir + pre_suffix + '/*'].select { |n| Dir.exist? n }
+  end
+
   def count_lvl
-    subdirs = ->(str) { Dir[@namedir + str + '/*'].select { |n| Dir.exist? n } }
-    comp_itm = ->(num) { subdirs.call(pre_suffix(num)).size }
+    comp_itm = ->(num) { subdirs(pre_suffix(num)).size }
     cur_subd_cnt = nil
     loop do
       prv_subd_cnt = cur_subd_cnt.nil? ? comp_itm.call(@lvl_subd) : cur_subd_cnt
