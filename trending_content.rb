@@ -68,7 +68,7 @@ class TrendingContent
 end
 
 # USAGE
-test = TrendingContent.new(4444)
+test = TrendingContent.new
 # OR
 # test = TrendingContent.new('./DropsuiteTest')
 p test.exec
