@@ -45,5 +45,8 @@ class TrendingContent
   end
 end
 
-test = TrendingContent.new
-test.exec
+#USAGE
+#test = TrendingContent.new  # => #<TrendingContent:0x007fd9241ae410 @namedir=".", @level_subdir=0>
+#OR
+#test = TrendingContent.new('./DropsuiteTest')
+#test.exec
