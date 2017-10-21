@@ -1,7 +1,7 @@
 require 'digest'
 class TrendingContent
-  def initialize(*args)
-    namedir  = args[0] || '.'
+  def initialize(path='.')
+    namedir  = path
     @namedir = namedir
     @level_subdir = 0
   end
