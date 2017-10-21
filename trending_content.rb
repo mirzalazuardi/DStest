@@ -1,30 +1,37 @@
 require 'digest'
 class TrendingContent
-  def initialize(path='.')
+  def initialize(path = '.')
     namedir  = path
     @namedir = namedir
     @level_subdir = 0
   end
 
-  def pre_suffix num
+  def pre_suffix(num)
     '/**' * num
   end
 
-  def count_level_subdir
-    subdirs         = lambda { |str| Dir[@namedir + str + '/*'].select{ |node| Dir.exist? node }}
-    comparable_item = lambda { |num| subdirs.call(pre_suffix(num)).size }
+  def count_lvl
+    subdirs = ->(str) { Dir[@namedir + str + '/*'].select { |n| Dir.exist? n } }
+    comparable_item = ->(num) { subdirs.call(pre_suffix(num)).size }
     curr_subdir_count = nil
     loop do
-      prev_subdir_count = (curr_subdir_count.nil? == true) ? comparable_item.call(@level_subdir) : curr_subdir_count
-      @level_subdir       += 1
+      if curr_subdir_count.nil? == true
+        prev_subdir_count = comparable_item.call(@level_subdir)
+      else
+        prev_subdir_count = curr_subdir_count
+      end
+      @level_subdir += 1
       curr_subdir_count = comparable_item.call(@level_subdir)
       break if curr_subdir_count == prev_subdir_count
     end
     @level_subdir
   end
 
-  def frequency arr
-    arr.inject(Hash.new(0)) { |h,v| h[v] += 1; h }
+  def frequency(arr)
+    arr.inject(Hash.new(0)) do |h, v|
+      h[v] += 1
+      h
+    end
   end
 
   def show_files
@@ -32,10 +39,16 @@ class TrendingContent
     Dir[path].select { |node| File.file? node }
   end
 
+  def show_digest(files)
+    files.map do |node|
+      Digest::SHA256.file(node).hexdigest
+    end
+  end
+
   def exec
-    count_level_subdir
+    count_lvl
     files               = show_files
-    digests             = files.map { |node| Digest::SHA256.file(node).hexdigest }
+    digests             = show_digest files
     freqs               = frequency(digests)
     digest_trend        = digests.max_by { |v| freqs[v] }
     content_idx         = digests.index(digest_trend)
@@ -45,8 +58,8 @@ class TrendingContent
   end
 end
 
-#USAGE
-#test = TrendingContent.new  # => #<TrendingContent:0x007fd9241ae410 @namedir=".", @level_subdir=0>
-#OR
-#test = TrendingContent.new('./DropsuiteTest')
-#test.exec
+# USAGE
+test = TrendingContent.new
+# OR
+# test = TrendingContent.new('./DropsuiteTest')
+test.exec
